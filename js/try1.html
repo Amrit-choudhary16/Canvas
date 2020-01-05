@@ -1,0 +1,99 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <title>Canvas</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<style>
+    #c {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+    }
+</style>
+<body>
+<canvas id="c"></canvas>
+<script>
+    imgToCanvas();
+    function imgToCanvas() {
+        let c = document.getElementById('c');
+        let height = window.innerHeight;
+        let width = window.innerWidth;
+        c.height = height;
+        c.width = width;
+        let cx = c.getContext('2d');
+        let centerPointXStart = width / 2;
+        let centerPointYStart = height / 2;
+        cx.fillStyle = "black";
+        let items = 4;
+        let a = 10, p=20, b=18, d=7, k=1;
+        for (let r = 0; r < 9; r++) {
+            for (let i = 0; i < items; i++) {
+                let degree = (360 * i / items);
+                let radius = 30;
+                let startPointX = centerPointXStart;
+                let startPointY = centerPointYStart;
+                let endPointX = startPointX + radius * Math.cos(2 * Math.PI * i / items);
+                let endPointY = startPointY + radius * Math.sin(2 * Math.PI * i / items);
+                let y = 1, m=40;
+                for (let j = 0; j < 7; j++) {
+                    if (j % 2 !== 0) {
+                        k = -1;
+                    } else {
+                        k = 1;
+                    }
+                    if (degree < 90) {
+                        cx.beginPath();
+                        cx.moveTo(startPointX, startPointY);
+                        cx.bezierCurveTo(startPointX + a, startPointY + (k * (p + (j * d))), endPointX - a, endPointY + (k * (p + (j * d))), endPointX, endPointY);
+                        cx.bezierCurveTo(endPointX - a, endPointY + (k * b), startPointX + a, startPointY + (k * b), startPointX, startPointY);
+                        cx.fill();
+                        cx.closePath();
+                    }
+                    if (degree >= 90 && degree < 180) {
+                        cx.beginPath();
+                        cx.moveTo(startPointX, startPointY);
+                        cx.bezierCurveTo(startPointX - (k * b), startPointY + a, endPointX - (k * b), endPointY - a, endPointX, endPointY);
+                        cx.bezierCurveTo(endPointX - (k * (p + (j * d))), endPointY - a, startPointX - (k * (p + (j * d))), startPointY + a, startPointX, startPointY);
+                        cx.fill();
+                        cx.closePath();
+                    }
+                    if (degree >= 180 && degree < 270) {
+                        cx.beginPath();
+                        cx.moveTo(startPointX, startPointY);
+                        cx.bezierCurveTo(startPointX - a, startPointY - (k * b), endPointX + a, endPointY - (k * b), endPointX, endPointY);
+                        cx.bezierCurveTo(endPointX + a, endPointY - (k * (p + (j * d))), startPointX - a, startPointY - (k * (p + (j * d))), startPointX, startPointY);
+                        cx.fill();
+                        cx.closePath();
+                    }
+                    if (degree >= 270 && degree < 360) {
+                        cx.beginPath();
+                        cx.moveTo(startPointX, startPointY);
+                        cx.bezierCurveTo(startPointX + (k * (p + (j * d))), startPointY - a, endPointX + (k * (p + (j * d))), endPointY + a, endPointX, endPointY);
+                        cx.bezierCurveTo(endPointX + (k * b), endPointY + a, startPointX + (k * b), startPointY - a, startPointX, startPointY);
+                        cx.fill();
+                        cx.closePath();
+                    }
+                    startPointX = endPointX;
+                    startPointY = endPointY;
+                    endPointX = centerPointXStart + (radius + m * y) * Math.cos(2 * Math.PI * i / items);
+                    endPointY = centerPointYStart + (radius + m * y) * Math.sin(2 * Math.PI * i / items);
+                    radius = radius + m * y;
+                    y++;
+                }
+            }
+            cx.translate(centerPointXStart, centerPointYStart);
+            cx.rotate(10 * Math.PI / 180);
+            cx.translate(-centerPointXStart, -centerPointYStart);
+        }
+    }
+</script>
+</body>
+</html>
